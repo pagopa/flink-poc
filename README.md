@@ -23,6 +23,7 @@ In this PoC, we create a data pipeline that listens for messages from an Azure E
     "dateOfBirth": "2023-09-13T09:46:42.927Z",
     "statusId": 1
 }
+```
 
 We can execute a SQL query like "SELECT * FROM status" on one of the databases, obtaining data like this:
 
@@ -31,6 +32,7 @@ We can execute a SQL query like "SELECT * FROM status" on one of the databases, 
     "id": 1,
     "value": "Active"
 }
+```
 
 Subsequently, we perform a join operation using the "statusId" field to enrich the information, resulting in the following:
 
@@ -43,6 +45,7 @@ Subsequently, we perform a join operation using the "statusId" field to enrich t
     "statusId": 1,
     "value": "Active"
 }
+```
 
 ## Setup
 
@@ -75,11 +78,13 @@ You can run the project in one of the following two modes:
 
 ```bash
 mvn clean package
+```
 
 2. Then, launch the project from the Flink cluster in detached mode:
 
 ```bash
 ./bin/flink run --detached ./target/flink-poc-1.0-SNAPSHOT.jar
+```
 
 ### Mode 2: Running with Maven
 
@@ -87,3 +92,4 @@ Execute the following Maven command to run the project directly:
 
 ```bash
 mvn exec:java -Dexec.mainClass="com.pagopa.Main"
+```
