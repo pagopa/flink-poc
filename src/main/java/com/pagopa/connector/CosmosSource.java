@@ -68,23 +68,30 @@ public class CosmosSource extends RichSourceFunction<RowData> {
         createDatabaseIfNotExists();
         createContainerIfNotExists();
         CosmosPagedIterable<JsonNode> queryItems = queryItems();
-        GenericRowData rowData = new GenericRowData(2);
-        if (queryItems.iterator().hasNext()) {
-            JsonNode queryItem = queryItems.iterator().next();
+        Iterator<JsonNode> queryIterator = queryItems.iterator();
+        while (queryIterator.hasNext()) {
+            JsonNode queryItem = queryIterator.next();
             Iterator<Entry<String, JsonNode>> iterator = queryItem.fields();
             int j = 0;
+            GenericRowData rowData = new GenericRowData(2);
             while (iterator.hasNext()) {
                 Entry<String, JsonNode> entry = iterator.next();
                 if (!entry.getKey().startsWith("_")) {
-                    rowData.setField(j, StringData.fromString(entry.getValue().toString()));
+                    String value = entry.getValue().asText();
+                    try {
+                        int val = Integer.parseInt(value);
+                        rowData.setField(j, val);
+                    } catch (Exception e) {
+                        rowData.setField(j, StringData.fromString(value));
+                    }
                     j++;
                 }
             }
+            ctx.collect(rowData);
         }
 
-        ctx.collect(rowData);
         while (running) {
-            Thread.sleep(30000);
+            Thread.sleep(3000);
         }
     }
 

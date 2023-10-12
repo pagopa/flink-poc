@@ -92,4 +92,4 @@ Execute the following Maven command to run the project directly:
 
 ```bash
 mvn exec:java -Dexec.mainClass="com.pagopa.Main"
-```
+```.
